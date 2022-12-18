@@ -1,7 +1,6 @@
 package br.edu.infnet.catalogo.modelo.entidades;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 
 @Entity
@@ -9,17 +8,17 @@ public class Equipamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long codigo;
     private String nome;
     private float mensalidade;
 
 
-    public Long getId() {
-        return id;
+    public Long getCodigo() {
+        return codigo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -41,7 +40,7 @@ public class Equipamento {
     @Override
     public String toString() {
         return "Equipamento{" +
-                "id=" + id +
+                "id=" + codigo +
                 ", nome='" + nome + '\'' +
                 ", mensalidade=" + mensalidade +
                 '}';
