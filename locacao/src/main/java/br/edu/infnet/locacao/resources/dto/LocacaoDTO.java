@@ -5,7 +5,7 @@ import java.util.List;
 public class LocacaoDTO {
     private Integer clienteId;
 
-    private List<EquipamentoDTO> equipamentos;
+    private List<EquipamentoCatalogoDTO> equipamentos;
 
     public Integer getClienteId() {
         return clienteId;
@@ -15,11 +15,11 @@ public class LocacaoDTO {
         this.clienteId = clienteId;
     }
 
-    public List<EquipamentoDTO> getEquipamentos() {
+    public List<EquipamentoCatalogoDTO> getEquipamentos() {
         return equipamentos;
     }
 
-    public void setEquipamentos(List<EquipamentoDTO> equipamentos) {
+    public void setEquipamentos(List<EquipamentoCatalogoDTO> equipamentos) {
         this.equipamentos = equipamentos;
     }
 

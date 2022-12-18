@@ -2,11 +2,12 @@ package br.edu.infnet.locacao.resources;
 
 import br.edu.infnet.locacao.clients.EquipamentoClient;
 import br.edu.infnet.locacao.resources.dto.ClienteDTO;
-import br.edu.infnet.locacao.resources.dto.EquipamentoDTO;
+import br.edu.infnet.locacao.resources.dto.EquipamentoCatalogoDTO;
 import br.edu.infnet.locacao.resources.dto.LocacaoDTO;
-import com.netflix.discovery.converters.Auto;
+import br.edu.infnet.locacao.resources.dto.LocacaoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,14 +31,17 @@ public class LocacaoResource {
     private EquipamentoClient equipamentoClient;
 
     @PostMapping
-    public void efetuaLocacao(@RequestBody LocacaoDTO locacaoDTO) {
+    public LocacaoResponseDTO efetuaLocacao(@RequestBody LocacaoDTO locacaoDTO) {
 
         ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacaoDTO.getClienteId(), ClienteDTO.class);
 
         System.out.println(clienteDTO);
         System.out.println(locacaoDTO);
 
-        List<EquipamentoDTO> equipamentos = equipamentoClient.getEquipamentos();
-        System.out.println(equipamentos);
+        ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos();
+        System.out.println(equipamentos.getBody());
+
+        return new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+
     }
 }
