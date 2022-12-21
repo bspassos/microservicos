@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Cliente {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo;
+    private Integer id;
     private String email;
     private String nome;
     private String endereco;
@@ -19,21 +19,21 @@ public class Cliente {
 
     }
 
-    public Cliente(Long codigo, String email, String nome, String endereco) {
+    public Cliente(Integer id, String email, String nome, String endereco) {
         super();
-        this.codigo = codigo;
+        this.id = id;
         this.email = email;
         this.nome = nome;
         this.endereco = endereco;
     }
 
 
-    public Long getCodigo() {
-        return codigo;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCodigo(Long codigo) {
-        this.codigo = codigo;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getEmail() {

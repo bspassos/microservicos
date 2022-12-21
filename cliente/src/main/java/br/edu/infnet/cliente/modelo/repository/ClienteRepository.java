@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import br.edu.infnet.cliente.modelo.entidades.Cliente;
 
 @Repository
-public interface ClienteRepository extends CrudRepository<Cliente, Long> {
+public interface ClienteRepository extends CrudRepository<Cliente, Integer> {
 
 }
