@@ -2,6 +2,8 @@ package br.edu.infnet.cliente.modelo.resources;
 
 import br.edu.infnet.cliente.modelo.entidades.Cliente;
 import br.edu.infnet.cliente.modelo.services.ClienteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteResource {
+
+    private static Logger log = LoggerFactory.getLogger(ClienteResource.class);
 
     @Autowired
     private ClienteService clienteService;
@@ -31,6 +35,9 @@ public class ClienteResource {
   
     @GetMapping
     public ResponseEntity<Object> getAll() {
+
+        log.info("API de Cliente");
+
         try{
             return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAll());
         } catch (Exception e){
@@ -41,6 +48,9 @@ public class ClienteResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
+
+        log.info("Chamada a api de clientes com id: {}", id);
+
         try {
 
             Optional<Cliente> clienteOptional = clienteService.findById(id);

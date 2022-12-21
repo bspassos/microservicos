@@ -2,6 +2,8 @@ package br.edu.infnet.catalogo.resources;
 
 import br.edu.infnet.catalogo.modelo.entidades.Equipamento;
 import br.edu.infnet.catalogo.modelo.services.EquipamentoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/equipamentos")
 public class EquipamentoResource {
+
+    private static Logger log = LoggerFactory.getLogger(EquipamentoResource.class);
 
     @Autowired
     private EquipamentoService equipamentoService;
@@ -42,6 +46,9 @@ public class EquipamentoResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
+
+        log.info("Chamada a api de catalogo com id: {}", id);
+
         try {
 
             Optional<Equipamento> equipamentoOptional = equipamentoService.findById(id);
