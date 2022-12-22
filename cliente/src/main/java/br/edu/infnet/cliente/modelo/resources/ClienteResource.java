@@ -2,6 +2,12 @@ package br.edu.infnet.cliente.modelo.resources;
 
 import br.edu.infnet.cliente.modelo.entidades.Cliente;
 import br.edu.infnet.cliente.modelo.services.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,14 @@ public class ClienteResource {
     private ClienteService clienteService;
 
 
+    @Operation(summary = "Cadastrar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cliente cadastrado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class))
+                    }
+            )
+    })
     @PostMapping
     public ResponseEntity<Object> insert(@RequestBody Cliente cliente) {
         try {
@@ -32,7 +46,17 @@ public class ClienteResource {
                     .body("Ocorreu um erro ao tentar inserir o cliente!");
         }
     }
-  
+
+    @Operation(summary = "Listar clientes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Clientes",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Cliente.class)))
+                    }
+            )
+    })
     @GetMapping
     public ResponseEntity<Object> getAll() {
 
@@ -46,6 +70,17 @@ public class ClienteResource {
         }
     }
 
+    @Operation(summary = "Detalhar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class))
+                    }
+            ),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado!",
+                    content = @Content
+            )
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
 
@@ -67,7 +102,18 @@ public class ClienteResource {
         }
     }
 
-   
+
+    @Operation(summary = "Alterar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente alterado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class))
+                    }
+            ),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado!",
+                    content = @Content
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Integer id, @RequestBody Cliente cliente) {
         try {
@@ -91,7 +137,16 @@ public class ClienteResource {
         }
     }
 
-    
+
+    @Operation(summary = "Deletar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente deletado!",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado!",
+                    content = @Content
+            )
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
         try {

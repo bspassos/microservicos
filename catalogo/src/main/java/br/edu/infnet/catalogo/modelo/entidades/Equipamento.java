@@ -1,5 +1,7 @@
 package br.edu.infnet.catalogo.modelo.entidades;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.*;
 
 
@@ -8,6 +10,7 @@ public class Equipamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
     private String nome;
     private float mensalidade;

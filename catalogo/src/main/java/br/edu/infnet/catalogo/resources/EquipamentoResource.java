@@ -2,6 +2,12 @@ package br.edu.infnet.catalogo.resources;
 
 import br.edu.infnet.catalogo.modelo.entidades.Equipamento;
 import br.edu.infnet.catalogo.modelo.services.EquipamentoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +28,14 @@ public class EquipamentoResource {
     private EquipamentoService equipamentoService;
 
 
+    @Operation(summary = "Cadastrar um equipamento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Equipamento cadastrado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Equipamento.class))
+                    }
+            )
+    })
     @PostMapping
     public ResponseEntity<Object> insert(@RequestBody Equipamento equipamento) {
         try {
@@ -34,6 +48,16 @@ public class EquipamentoResource {
         }
     }
 
+    @Operation(summary = "Listar equipamentos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Equipamentos",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Equipamento.class)))
+                    }
+            )
+    })
     @GetMapping
     public ResponseEntity<Object> getAll() {
         try{
@@ -44,6 +68,17 @@ public class EquipamentoResource {
         }
     }
 
+    @Operation(summary = "Detalhar um equipamento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Equipamento",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Equipamento.class))
+                    }
+            ),
+            @ApiResponse(responseCode = "404", description = "Equipamento não encontrado!",
+                    content = @Content
+            )
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
 
@@ -66,6 +101,17 @@ public class EquipamentoResource {
     }
 
 
+    @Operation(summary = "Alterar um equipamento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Equipamento alterado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Equipamento.class))
+                    }
+            ),
+            @ApiResponse(responseCode = "404", description = "Equipamento não encontrado!",
+                    content = @Content
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Integer id, @RequestBody Equipamento equipamento) {
         try {
@@ -89,6 +135,15 @@ public class EquipamentoResource {
     }
 
 
+    @Operation(summary = "Deletar um equipamento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Equipamento deletado!",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "404", description = "Equipamento não encontrado!",
+                    content = @Content
+            )
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
         try {
