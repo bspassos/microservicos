@@ -29,4 +29,6 @@ services:
 
 - Para testes e acesso a documentação da API Catálogo acesse a url http://localhost:8383/swagger-ui.html
 
+- Para testes e acesso a documentação da API Locação acesse a url http://localhost:8181/swagger-ui.html
+
 
