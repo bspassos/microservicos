@@ -38,6 +38,9 @@ public class EquipamentoResource {
     })
     @PostMapping
     public ResponseEntity<Object> insert(@RequestBody Equipamento equipamento) {
+
+        log.info("Chamada para api de catalogo para inserir equipamento com dados {}", equipamento);
+
         try {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(equipamentoService.save(equipamento));
@@ -60,6 +63,9 @@ public class EquipamentoResource {
     })
     @GetMapping
     public ResponseEntity<Object> getAll() {
+
+        log.info("Chamada a api de catalogo para lista equipamentos");
+
         try{
             return ResponseEntity.status(HttpStatus.OK).body(equipamentoService.findAll());
         } catch (Exception e){
@@ -82,7 +88,7 @@ public class EquipamentoResource {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
 
-        log.info("Chamada a api de catalogo com id: {}", id);
+        log.info("Chamada a api de catalogo para pegar equipamento com id: {}", id);
 
         try {
 
@@ -114,6 +120,9 @@ public class EquipamentoResource {
     })
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Integer id, @RequestBody Equipamento equipamento) {
+
+        log.info("Chamada a api de catalogo para alterar equipamento com id: {} e com os dados {}", id, equipamento);
+
         try {
 
             Optional<Equipamento> equipamentoOptional = equipamentoService.findById(id);
@@ -146,6 +155,9 @@ public class EquipamentoResource {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
+
+        log.info("Chamada a api de catalogo para deletar equipamento com id: {}", id);
+
         try {
 
             Optional<Equipamento> equipamentoOptional = equipamentoService.findById(id);

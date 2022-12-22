@@ -36,16 +36,15 @@ public class LocacaoResource {
     @PostMapping
     public LocacaoResponseDTO efetuaLocacao(@RequestBody LocacaoDTO locacaoDTO) {
 
-        log.info("solicitacao para locacao com a informacao: {}", locacaoDTO);
+        log.info("Chamada para api de locacao para solicitar locacao com dados {}", locacaoDTO);
 
         if(log.isDebugEnabled()){
             log.debug("Debug ligado");
         }
+
         ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacaoDTO.getClienteId(), ClienteDTO.class);
 
-        System.out.println(clienteDTO);
-        System.out.println(locacaoDTO);
-        log.info("Chamada a api de clientes realizada: {}", clienteDTO);
+        log.info("Chamada a api de clientes através da api de locação com os dados: {}", clienteDTO);
 
         ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos();
         System.out.println(equipamentos.getBody());

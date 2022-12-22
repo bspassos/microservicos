@@ -37,6 +37,9 @@ public class ClienteResource {
     })
     @PostMapping
     public ResponseEntity<Object> insert(@RequestBody Cliente cliente) {
+
+        log.info("Chamada para api de cliente para inserir cliente com os dados {}", cliente);
+
         try {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(cliente));
@@ -60,7 +63,7 @@ public class ClienteResource {
     @GetMapping
     public ResponseEntity<Object> getAll() {
 
-        log.info("API de Cliente");
+        log.info("Chamada para api de cliente para listar clientes");
 
         try{
             return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAll());
@@ -84,7 +87,7 @@ public class ClienteResource {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id) {
 
-        log.info("Chamada a api de clientes com id: {}", id);
+        log.info("Chamada a api de cliente para pegar o cliente com id: {}", id);
 
         try {
 
@@ -116,6 +119,9 @@ public class ClienteResource {
     })
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Integer id, @RequestBody Cliente cliente) {
+
+        log.info("Chamada a api de cliente para alterar cliente com id: {} e com os dados {}", id, cliente);
+
         try {
 
             Optional<Cliente> clienteOptional = clienteService.findById(id);
@@ -149,6 +155,9 @@ public class ClienteResource {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Integer id) {
+
+        log.info("Chamada a api de cliente para deletar cliente com id: {}", id);
+
         try {
 
             Optional<Cliente> clienteOptional = clienteService.findById(id);
