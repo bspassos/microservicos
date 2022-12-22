@@ -1,4 +1,4 @@
-# microservicos
+# microsservicos
 Trabalho de microserviços da pós Engenharia de Software - Infnet
 
 ## Banco de Dados
@@ -25,4 +25,8 @@ services:
 
 ## Documentação
 
-Para testes e acesso a documentação da API Clientes acesse a url http://localhost:8282/swagger-ui.html
+- Para testes e acesso a documentação da API Clientes acesse a url http://localhost:8282/swagger-ui.html
+
+- Para testes e acesso a documentação da API Clientes acesse a url http://localhost:8383/swagger-ui/index.html
+
+
