@@ -2,18 +2,18 @@ package br.edu.infnet.locacao.resources.dto;
 
 public class EquipamentoCatalogoDTO {
 
-    private Integer codigo;
+    private Integer id;
 
     private String nome;
 
     private float mensalidade;
 
-    public Integer getCodigo() {
-        return codigo;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -35,7 +35,7 @@ public class EquipamentoCatalogoDTO {
     @Override
     public String toString() {
         return "EquipamentoDTO{" +
-                "codigo=" + codigo +
+                "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", mensalidade=" + mensalidade +
                 '}';

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,16 @@ public class EquipamentoService {
 
     public Collection<Equipamento> findAll() {
         return (Collection<Equipamento>) equipamentoRepository.findAll();
+    }
+
+    public Collection<Equipamento> findAllByIds(List<Equipamento> equipamentos) {
+
+        List<Integer> ids = new ArrayList<>();
+        for (Equipamento equipamento: equipamentos) {
+            ids.add(equipamento.getId());
+        }
+
+        return (Collection<Equipamento>) equipamentoRepository.findAllByIds(ids);
     }
 
     public Optional<Equipamento> findById(Integer id) {

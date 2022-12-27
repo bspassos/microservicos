@@ -74,6 +74,30 @@ public class EquipamentoResource {
         }
     }
 
+    @Operation(summary = "Listar equipamentos por lista ids")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Equipamentos por lista de ids",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Equipamento.class)))
+                    }
+            )
+    })
+    @PostMapping("/search")
+    public ResponseEntity<Object> getAllByIds(@RequestBody List<Equipamento> equipamentos) {
+
+        log.info("Chamada a api de catalogo para lista equipamentos por id");
+
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(equipamentoService.findAllByIds(equipamentos));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+                    //.body("Ocorreu um erro ao tentar listar os equipamentos por id!");
+        }
+    }
+
     @Operation(summary = "Detalhar um equipamento")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Equipamento",

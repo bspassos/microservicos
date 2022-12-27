@@ -44,10 +44,12 @@ public class LocacaoResource {
 
         ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacaoDTO.getClienteId(), ClienteDTO.class);
 
-        log.info("Chamada a api de clientes através da api de locação com os dados: {}", clienteDTO);
+        log.info("Chamada a api de clientes através da api de locação com os dados {}", clienteDTO);
 
-        ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos();
-        System.out.println(equipamentos.getBody());
+        ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos(locacaoDTO.getEquipamentos());
+
+        log.info("Chamada a api de equipamentos através da api de locação com os dados {}", equipamentos.getBody());
+
 
         return new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
 
