@@ -1,11 +1,15 @@
 package br.edu.infnet.locacao.resources.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class EquipamentoCatalogoDTO {
 
     private Integer id;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String nome;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private float mensalidade;
 
     public Integer getId() {
