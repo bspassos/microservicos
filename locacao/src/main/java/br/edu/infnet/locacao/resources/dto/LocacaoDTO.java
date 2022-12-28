@@ -5,6 +5,8 @@ import java.util.List;
 public class LocacaoDTO {
     private Integer clienteId;
 
+    private int meses;
+
     private List<EquipamentoCatalogoDTO> equipamentos;
 
     public Integer getClienteId() {
@@ -13,6 +15,10 @@ public class LocacaoDTO {
 
     public void setClienteId(Integer clienteId) {
         this.clienteId = clienteId;
+    }
+
+    public int getMeses() {
+        return meses;
     }
 
     public List<EquipamentoCatalogoDTO> getEquipamentos() {

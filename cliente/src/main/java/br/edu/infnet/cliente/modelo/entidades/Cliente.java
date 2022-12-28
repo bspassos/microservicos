@@ -10,7 +10,8 @@ import javax.persistence.Id;
 @Entity
 public class Cliente {
 
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
     private String email;

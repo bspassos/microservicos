@@ -1,10 +1,12 @@
 package br.edu.infnet.locacao.resources;
 
 import br.edu.infnet.locacao.clients.EquipamentoClient;
+import br.edu.infnet.locacao.entidades.Locacao;
 import br.edu.infnet.locacao.resources.dto.ClienteDTO;
 import br.edu.infnet.locacao.resources.dto.EquipamentoCatalogoDTO;
 import br.edu.infnet.locacao.resources.dto.LocacaoDTO;
 import br.edu.infnet.locacao.resources.dto.LocacaoResponseDTO;
+import br.edu.infnet.locacao.services.LocacaoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,6 +35,9 @@ public class LocacaoResource {
 
     @Autowired
     private EquipamentoClient equipamentoClient;
+
+    @Autowired
+    private LocacaoService locacaoService;
 
     @PostMapping
     public LocacaoResponseDTO efetuaLocacao(@RequestBody LocacaoDTO locacaoDTO) {
@@ -50,6 +56,13 @@ public class LocacaoResource {
 
         log.info("Chamada a api de equipamentos através da api de locação com os dados {}", equipamentos.getBody());
 
+        List<Integer> ids = new ArrayList<>();
+        for (EquipamentoCatalogoDTO equipamentoCatalogoDTO : locacaoDTO.getEquipamentos()) {
+            ids.add(equipamentoCatalogoDTO.getId());
+        }
+
+        Locacao locacao = new Locacao(locacaoDTO.getMeses(), locacaoDTO.getClienteId(), ids);
+        locacaoService.save(locacao);
 
         return new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
 
