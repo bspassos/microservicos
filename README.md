@@ -33,5 +33,7 @@ services:
 
 ### Gateway
 
-http://localhost:8080
+ - http://localhost:8080/clientes
+ - http://localhost:8080/equipamentos
+ - http://localhost:8080/locacoes
 
