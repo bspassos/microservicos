@@ -31,4 +31,7 @@ services:
 
 - Para testes e acesso a documentação da API Locação acesse a url http://localhost:8181/swagger-ui.html
 
+### Gateway
+
+http://localhost:8080
 
