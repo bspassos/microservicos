@@ -11,11 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -65,6 +63,46 @@ public class LocacaoResource {
         locacaoService.save(locacao);
 
         return new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAll(){
+
+        log.info("Chamada para api de locação para listar locações");
+
+        try{
+            List<Locacao> locacoes = (List<Locacao>) locacaoService.findAll();
+
+            List<LocacaoResponseDTO> locacaoResponseDTOS = new ArrayList<>();
+
+            for (Locacao locacao: locacoes) {
+                System.out.println(locacao);
+
+                log.info("Chamada para api de cliente para pegar o cliente da locacao {}", locacao.getId());
+
+                ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacao.getIdCliente(), ClienteDTO.class);
+
+                List<EquipamentoCatalogoDTO> equipamentosCatalogo = new ArrayList<>();
+                for (Integer id : locacao.getIdEquipamento()) {
+                    EquipamentoCatalogoDTO equipamentoCatalogoDTO = new EquipamentoCatalogoDTO();
+                    equipamentoCatalogoDTO.setId(id);
+                    equipamentosCatalogo.add(equipamentoCatalogoDTO);
+                }
+
+                log.info("Chamada para api de catálogo para pegar os equipamentos da locacao {}", locacao.getId());
+
+                ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos(equipamentosCatalogo);
+
+                locacaoResponseDTOS.add(new LocacaoResponseDTO(clienteDTO, equipamentos.getBody()));
+            }
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(locacaoResponseDTOS);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao tentar listar as locacoes!");
+        }
 
     }
 }

@@ -5,6 +5,8 @@ import br.edu.infnet.locacao.repository.LocacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class LocacaoService {
 
@@ -13,5 +15,9 @@ public class LocacaoService {
 
     public Locacao save(Locacao locacao) {
         return locacaoRepository.save(locacao);
+    }
+
+    public Collection<Locacao> findAll() {
+        return (Collection<Locacao>) locacaoRepository.findAll();
     }
 }

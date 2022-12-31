@@ -58,4 +58,15 @@ public class Locacao {
     public void setIdEquipamento(List<Integer> idEquipamento) {
         this.idEquipamento = idEquipamento;
     }
+
+    @Override
+    public String toString() {
+        return "Locacao{" +
+                "id=" + id +
+                ", data=" + data +
+                ", meses=" + meses +
+                ", idCliente=" + idCliente +
+                ", idEquipamento=" + idEquipamento +
+                '}';
+    }
 }
