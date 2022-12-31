@@ -22,6 +22,10 @@ public class LocacaoService {
         return (Collection<Locacao>) locacaoRepository.findAll();
     }
 
+    public Collection<Locacao> findAllByCliente(Integer idCliente) {
+        return (Collection<Locacao>) locacaoRepository.findAllByCliente(idCliente);
+    }
+
     public Optional<Locacao> findById(Integer id) {
         return locacaoRepository.findById(id);
     }

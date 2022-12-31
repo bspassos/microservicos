@@ -61,9 +61,13 @@ public class LocacaoResource {
         }
 
         Locacao locacao = new Locacao(locacaoDTO.getMeses(), locacaoDTO.getClienteId(), ids);
-        locacaoService.save(locacao);
+        Locacao locacaoSalva = locacaoService.save(locacao);
 
-        return new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+        LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+        locacaoResponseDTO.setId(locacaoSalva.getId());
+        locacaoResponseDTO.setData(locacaoSalva.getData());
+
+        return locacaoResponseDTO;
 
     }
 
@@ -94,7 +98,54 @@ public class LocacaoResource {
 
                 ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos(equipamentosCatalogo);
 
-                locacaoResponseDTOS.add(new LocacaoResponseDTO(clienteDTO, equipamentos.getBody()));
+                LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+                locacaoResponseDTO.setId(locacao.getId());
+                locacaoResponseDTO.setData(locacao.getData());
+
+                locacaoResponseDTOS.add(locacaoResponseDTO);
+            }
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(locacaoResponseDTOS);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao tentar listar as locacoes!");
+        }
+
+    }
+
+    @GetMapping("cliente/{idCliente}")
+    public ResponseEntity<Object> getAllByCliente(@PathVariable(value = "idCliente") Integer idCliente){
+
+        log.info("Chamada para api de locação para listar locações do cliente {}", idCliente);
+
+        try{
+            List<Locacao> locacoes = (List<Locacao>) locacaoService.findAllByCliente(idCliente);
+
+            List<LocacaoResponseDTO> locacaoResponseDTOS = new ArrayList<>();
+
+            for (Locacao locacao: locacoes) {
+
+                log.info("Chamada para api de cliente para pegar o cliente da locacao {}", locacao.getId());
+
+                ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacao.getIdCliente(), ClienteDTO.class);
+
+                List<EquipamentoCatalogoDTO> equipamentosCatalogo = new ArrayList<>();
+                for (Integer id : locacao.getIdEquipamento()) {
+                    EquipamentoCatalogoDTO equipamentoCatalogoDTO = new EquipamentoCatalogoDTO();
+                    equipamentoCatalogoDTO.setId(id);
+                    equipamentosCatalogo.add(equipamentoCatalogoDTO);
+                }
+
+                log.info("Chamada para api de catálogo para pegar os equipamentos da locacao {}", locacao.getId());
+
+                ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos(equipamentosCatalogo);
+
+                LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+                locacaoResponseDTO.setId(locacao.getId());
+                locacaoResponseDTO.setData(locacao.getData());
+
+                locacaoResponseDTOS.add(locacaoResponseDTO);
             }
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
