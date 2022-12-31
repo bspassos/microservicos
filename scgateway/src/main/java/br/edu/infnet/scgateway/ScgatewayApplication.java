@@ -18,6 +18,11 @@ public class ScgatewayApplication {
         return builder.routes()
                 .route(p -> p
                         .path("/clientes/**")
+                        .filters(f -> f.circuitBreaker(
+                                config -> config
+                                        .setName("mycmd")
+                                        .setFallbackUri("forward:/fallback-cliente")
+                        ))
                         .uri("http://localhost:8282")
                 )
                 .route(p -> p
@@ -46,7 +51,12 @@ public class ScgatewayApplication {
         return "Serviço de catalogo indisponível, volte mais tarde!!!";
     }
 
-    @PostMapping("/fallback-locacao")
+    @GetMapping("/fallback-cliente")
+    public String fallbackCliente() {
+        return "Serviço de catalogo indisponível, volte mais tarde!!!";
+    }
+
+    @GetMapping("/fallback-locacao")
     public String fallbackLocacao() {
         return "Serviço de locação indisponível, volte mais tarde!";
     }
