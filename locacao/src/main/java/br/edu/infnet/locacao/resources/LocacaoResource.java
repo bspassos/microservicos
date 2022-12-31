@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/locacoes")
@@ -77,7 +78,6 @@ public class LocacaoResource {
             List<LocacaoResponseDTO> locacaoResponseDTOS = new ArrayList<>();
 
             for (Locacao locacao: locacoes) {
-                System.out.println(locacao);
 
                 log.info("Chamada para api de cliente para pegar o cliente da locacao {}", locacao.getId());
 
@@ -99,6 +99,46 @@ public class LocacaoResource {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(locacaoResponseDTOS);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao tentar listar as locacoes!");
+        }
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id){
+
+        log.info("Chamada para api de locação para detalha locação com id {}", id);
+
+        try{
+            Optional<Locacao> locacaoOptional = locacaoService.findById(id);
+
+            if(locacaoOptional.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
+            }
+
+            log.info("Chamada para api de cliente para pegar o cliente da locacao {}", locacaoOptional.get().getId());
+
+            ClienteDTO clienteDTO = restTemplate.getForObject(clienteApiUrl+locacaoOptional.get().getIdCliente(), ClienteDTO.class);
+
+            List<EquipamentoCatalogoDTO> equipamentosCatalogo = new ArrayList<>();
+            for (Integer idEquipamento : locacaoOptional.get().getIdEquipamento()) {
+                EquipamentoCatalogoDTO equipamentoCatalogoDTO = new EquipamentoCatalogoDTO();
+                equipamentoCatalogoDTO.setId(idEquipamento);
+                equipamentosCatalogo.add(equipamentoCatalogoDTO);
+            }
+
+            log.info("Chamada para api de catálogo para pegar os equipamentos da locacao {}", locacaoOptional.get().getId());
+
+            ResponseEntity<List<EquipamentoCatalogoDTO>> equipamentos = equipamentoClient.getEquipamentos(equipamentosCatalogo);
+
+            LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
+            locacaoResponseDTO.setId(locacaoOptional.get().getId());
+            locacaoResponseDTO.setData(locacaoOptional.get().getData());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(locacaoResponseDTO);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Ocorreu um erro ao tentar listar as locacoes!");
