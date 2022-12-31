@@ -47,7 +47,7 @@ public class ScgatewayApplication {
     }
 
     @GetMapping("/fallback-catalogo")
-    public String fallback() {
+    public String fallbackCatalogo() {
         return "Serviço de catalogo indisponível, volte mais tarde!!!";
     }
 
