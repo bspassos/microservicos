@@ -7,6 +7,12 @@ import br.edu.infnet.locacao.resources.dto.EquipamentoCatalogoDTO;
 import br.edu.infnet.locacao.resources.dto.LocacaoDTO;
 import br.edu.infnet.locacao.resources.dto.LocacaoResponseDTO;
 import br.edu.infnet.locacao.services.LocacaoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +44,17 @@ public class LocacaoResource {
     @Autowired
     private LocacaoService locacaoService;
 
+    @Operation(summary = "Efetuar uma locação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Tarefa cadastrada",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = LocacaoResponseDTO.class))
+                    }
+            ),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado!",
+                    content = @Content
+            )
+    })
     @PostMapping
     public LocacaoResponseDTO efetuaLocacao(@RequestBody LocacaoDTO locacaoDTO) {
 
@@ -66,11 +83,22 @@ public class LocacaoResource {
         LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
         locacaoResponseDTO.setId(locacaoSalva.getId());
         locacaoResponseDTO.setData(locacaoSalva.getData());
+        locacaoResponseDTO.setMeses(locacaoSalva.getMeses());
 
         return locacaoResponseDTO;
 
     }
 
+    @Operation(summary = "Listar todas as locações")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Locações",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = LocacaoResponseDTO.class)))
+                    }
+            )
+    })
     @GetMapping
     public ResponseEntity<Object> getAll(){
 
@@ -101,6 +129,7 @@ public class LocacaoResource {
                 LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
                 locacaoResponseDTO.setId(locacao.getId());
                 locacaoResponseDTO.setData(locacao.getData());
+                locacaoResponseDTO.setMeses(locacao.getMeses());
 
                 locacaoResponseDTOS.add(locacaoResponseDTO);
             }
@@ -114,6 +143,16 @@ public class LocacaoResource {
 
     }
 
+    @Operation(summary = "Listar as locações de um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Locacações",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = LocacaoResponseDTO.class)))
+                    }
+            )
+    })
     @GetMapping("cliente/{idCliente}")
     public ResponseEntity<Object> getAllByCliente(@PathVariable(value = "idCliente") Integer idCliente){
 
@@ -144,6 +183,7 @@ public class LocacaoResource {
                 LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
                 locacaoResponseDTO.setId(locacao.getId());
                 locacaoResponseDTO.setData(locacao.getData());
+                locacaoResponseDTO.setMeses(locacao.getMeses());
 
                 locacaoResponseDTOS.add(locacaoResponseDTO);
             }
@@ -157,6 +197,14 @@ public class LocacaoResource {
 
     }
 
+    @Operation(summary = "Detalhar uma locação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Locação",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = LocacaoResponseDTO.class))
+                    }
+            )
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") Integer id){
 
@@ -187,6 +235,7 @@ public class LocacaoResource {
             LocacaoResponseDTO locacaoResponseDTO = new LocacaoResponseDTO(clienteDTO, equipamentos.getBody());
             locacaoResponseDTO.setId(locacaoOptional.get().getId());
             locacaoResponseDTO.setData(locacaoOptional.get().getData());
+            locacaoResponseDTO.setMeses(locacaoOptional.get().getMeses());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(locacaoResponseDTO);

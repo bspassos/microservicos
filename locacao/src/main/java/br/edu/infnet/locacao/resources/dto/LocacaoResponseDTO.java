@@ -7,6 +7,7 @@ public class LocacaoResponseDTO {
 
     private Integer id;
     private LocalDateTime data;
+    private int meses;
     private ClienteDTO cliente;
     private List<EquipamentoCatalogoDTO> equipamentosCatalogoDTO;
 
@@ -42,5 +43,13 @@ public class LocacaoResponseDTO {
 
     public LocalDateTime getData() {
         return data;
+    }
+
+    public int getMeses() {
+        return meses;
+    }
+
+    public void setMeses(int meses) {
+        this.meses = meses;
     }
 }
